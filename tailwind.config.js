@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {},
     fontFamily: {
-      andika: ['Andika'],
+      Andika: ['Andika', 'sans-serif'],
     }
   },
   plugins: [],
