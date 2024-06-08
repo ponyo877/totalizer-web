@@ -3,7 +3,7 @@ import Title from "./components/Title"
 import LocalIcon from "./assets/local.svg";
 import GlobalIcon from "./assets/global.svg";
 
-function App() {
+function TitlePage() {
   return (
     <>
       <div className="flex flex-col items-center bg-blue-50 justify-center h-dvh w-screen">
@@ -31,4 +31,4 @@ function App() {
   )
 }
 
-export default App
+export default TitlePage
