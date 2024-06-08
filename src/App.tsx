@@ -6,7 +6,7 @@ import GlobalIcon from "./assets/global.svg";
 function App() {
   return (
     <>
-      <div className="flex flex-col items-center bg-blue-50 justify-center h-screen w-screen">
+      <div className="flex flex-col items-center bg-blue-50 justify-center h-dvh w-screen">
         <Title />
         <Button icon={<img
               className="avatar"
