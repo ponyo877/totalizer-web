@@ -1,7 +1,7 @@
 import { FC } from "react";
-import MeltingIcon from "../assets/melting.svg";
+import MeltingIcon from ".../assets/melting.svg";
 
-export const Title :FC = () => {
+const RoomSetting :FC = () => {
     return (
         <>
             <div className="flex flex-col pb-52 m-8 items-center">
@@ -14,3 +14,5 @@ export const Title :FC = () => {
         </>
     );
 };
+
+export default RoomSetting;
