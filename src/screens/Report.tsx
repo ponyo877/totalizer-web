@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Button from "../components/Button"
-import Title from "../components/Title"
+import {Top} from "./Top"
 import LocalIcon from "../assets/local.svg";
 import GlobalIcon from "../assets/global.svg";
 
@@ -8,7 +8,7 @@ export const Report: FC = () => {
   return (
     <>
       <div className="flex flex-col items-center bg-blue-50 justify-center h-dvh w-screen">
-        <Title />
+        <Top />
         <Button icon={<img
               className="avatar"
               src={LocalIcon}
