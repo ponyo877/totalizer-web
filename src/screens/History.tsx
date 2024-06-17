@@ -12,21 +12,21 @@ export const History: FC = () => {
         <Button icon={<img
           className="avatar"
           src={LocalIcon}
-          alt={'local'}
+          alt='local'
           style={{
             width: 27,
             height: 27,
           }}
-        />} text={'1台で'} />
+        />} text='1台で' />
         <Button icon={<img
           className="avatar"
           src={GlobalIcon}
-          alt={'global'}
+          alt='global'
           style={{
             width: 32,
             height: 27,
           }}
-        />} text={'みんなで'} />
+        />} text='みんなで' />
       </div>
     </>
   )
