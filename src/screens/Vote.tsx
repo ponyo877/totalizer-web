@@ -1,17 +1,25 @@
 import { FC, useState } from "react";
 import Button from "../components/Button"
 import { Question } from "../components/Question"
+import BlockModal from "../components/BlockModal";
 
 export const Vote: FC = () => {
   const [yesCount, setYesCount] = useState(0);
   const [noCount, setNoCount] = useState(0);
+  const [showModal, setShowModal] = useState(false);
 
   const handleYesClick = () => {
     setYesCount(yesCount + 1);
+    setShowModal(true);
   };
 
   const handleNoClick = () => {
     setNoCount(noCount + 1);
+    setShowModal(true);
+  };
+
+  const handleReceiveClick = () => {
+    setShowModal(false);
   };
 
   return (
@@ -29,10 +37,16 @@ export const Vote: FC = () => {
               <div className="text-base">参加</div>
             </div>
           </div>
-          <Button text='YES' bgColor='bg-emerald-600' txtColor='text-white' center onClick={handleYesClick}/>
-          <Button text='NO' bgColor='bg-rose-600' txtColor='text-white' center onClick={handleNoClick}/>
+          <div className="max-w-96 px-8 mb-8">
+            <Button text='YES' bgColor='bg-emerald-600' txtColor='text-white' center onClick={handleYesClick} />
+            <Button text='NO' bgColor='bg-rose-600' txtColor='text-white' center onClick={handleNoClick} />
+          </div>
         </div>
       </div>
+
+      {showModal && (
+        <BlockModal onReceiveClick={handleReceiveClick} />
+      )}
     </>
   )
 }

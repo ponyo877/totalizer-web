@@ -1,5 +1,6 @@
 import LocalSvg from "../assets/local.svg";
 import GlobaSvg from "../assets/global.svg";
+import { JSX } from "react";
 
 export const LocalIcon: JSX.Element = <img
     className="avatar"

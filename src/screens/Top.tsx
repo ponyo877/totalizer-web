@@ -23,7 +23,7 @@ export const Top: FC = () => {
         <div className="flex flex-col items-center justify-center bg-blue-50 h-1/2 w-screen">
           <Title />
         </div>
-        <div className="flex flex-col items-center bg-blue-50 h-1/2 w-screen">
+        <div className="max-w-96 px-8 mb-8">
           <Button icon={LocalIcon} text='1台で' onClick={() => navigate('vote')} />
           <Button icon={GlobalIcon} text='みんなで' onClick={openModal} />
         </div>
