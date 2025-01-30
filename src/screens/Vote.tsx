@@ -1,20 +1,35 @@
-import { FC, useState } from "react";
+import { FC, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/Button"
 import { Question } from "../components/Question"
 import BlockModal from "../components/BlockModal";
+import { FAB } from "../components/FAB";
+
+interface HistoryItem {
+  question: string;
+  participants: number;
+  yesCount: number;
+  timestamp: string;
+}
+
+const STORAGE_KEY = 'vote-history';
 
 export const Vote: FC = () => {
+  const navigate = useNavigate();
   const [yesCount, setYesCount] = useState(0);
   const [noCount, setNoCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState('ここに質問を書きます?');
 
   const handleYesClick = () => {
-    setYesCount(yesCount + 1);
+    const newYesCount = yesCount + 1;
+    setYesCount(newYesCount);
     setShowModal(true);
   };
 
   const handleNoClick = () => {
-    setNoCount(noCount + 1);
+    const newNoCount = noCount + 1;
+    setNoCount(newNoCount);
     setShowModal(true);
   };
 
@@ -22,12 +37,39 @@ export const Vote: FC = () => {
     setShowModal(false);
   };
 
+  const handleQuestionChange = useCallback((question: string) => {
+    setCurrentQuestion(question);
+  }, []);
+
+  const handleShowResults = useCallback(() => {
+    const historyItem: HistoryItem = {
+      question: currentQuestion,
+      participants: yesCount + noCount,
+      yesCount: yesCount,
+      timestamp: new Date().toLocaleString()
+    };
+
+    // LocalStorageから既存の履歴を取得
+    const existingHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    
+    // 新しい履歴を追加
+    const updatedHistory = [...existingHistory, historyItem];
+    
+    // LocalStorageに保存
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedHistory));
+  }, [currentQuestion, yesCount, noCount]);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center bg-blue-50 h-dvh w-screen">
         <div className="flex flex-col items-center bg-blue-50 h-1/2 max-w-96 w-screen">
           <div className="flex flex-col items-center bg-indigo-200 h-5/6 max-w-96 w-screen">
-            <Question yesCount={yesCount} noCount={noCount} />
+            <Question
+              yesCount={yesCount}
+              noCount={noCount}
+              onQuestionChange={handleQuestionChange}
+              onShowResults={handleShowResults}
+            />
           </div>
         </div>
         <div className="flex flex-col items-center bg-blue-50 h-1/2 w-screen">
@@ -47,6 +89,12 @@ export const Vote: FC = () => {
       {showModal && (
         <BlockModal onReceiveClick={handleReceiveClick} />
       )}
+      
+      <FAB 
+        icon="history" 
+        onClick={() => navigate('/history')}  
+        className="fixed bottom-8 right-8"
+      />
     </>
   )
 }

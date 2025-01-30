@@ -1,17 +1,25 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { ResultButton } from "./ResultButton";
 
 interface QuestionProps {
     yesCount: number;
     noCount: number;
+    onQuestionChange: (question: string) => void;
+    onShowResults: () => void;
 }
 
-export const Question: FC<QuestionProps> = ({ yesCount, noCount }) => {
+export const Question: FC<QuestionProps> = ({ yesCount, noCount, onQuestionChange, onShowResults }) => {
     const [showResults, setShowResults] = useState(false);
+    const [question, setQuestion] = useState('ここに質問を書きます?');
     const totalCount = yesCount + noCount;
+
+    useEffect(() => {
+        onQuestionChange(question);
+    }, [question, onQuestionChange]);
 
     const handleShowResults = () => {
         setShowResults(true);
+        onShowResults();
     };
 
     return (
@@ -24,8 +32,8 @@ export const Question: FC<QuestionProps> = ({ yesCount, noCount }) => {
                             : 'h-[90%] text-base'
                     }`}
                     type="text"
-                    defaultValue='ここに質問を書きます?'
-                    onChange={(e) => e.preventDefault()}
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
                 />
                 {showResults && (
                         <div className="absolute top-[40%] text-center animate-scale-in">
