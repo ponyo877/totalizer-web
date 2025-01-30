@@ -27,7 +27,7 @@ export const Vote: FC = () => {
       <div className="flex flex-col items-center justify-center bg-blue-50 h-dvh w-screen">
         <div className="flex flex-col items-center bg-blue-50 h-1/2 max-w-96 w-screen">
           <div className="flex flex-col items-center bg-indigo-200 h-5/6 max-w-96 w-screen">
-            <Question />
+            <Question yesCount={yesCount} noCount={noCount} />
           </div>
         </div>
         <div className="flex flex-col items-center bg-blue-50 h-1/2 w-screen">

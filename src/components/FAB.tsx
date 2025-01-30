@@ -16,7 +16,7 @@ export const FAB: FC<fabOption> = (op: fabOption) => {
     return (
         <div
             className={`${op.coordinate} p-2 text-2xl ${bgColor} ${txtColor} rounded-2xl w-[50%] shadow-lg font-Andika cursor-pointer`}
-            onClick={() => window.open("https://www.google.com/?hl=ja")}>
+            onClick={op.onClick}>
             {op.text}
         </div>
     );
