@@ -5,19 +5,18 @@ type fabOption = {
     text?: ReactNode;
     txtColor?: string;
     bgColor?: string;
-    coordinate?: string;
+    className?: string;
     onClick?: () => void;
 };
 
 export const FAB: FC<fabOption> = (op: fabOption) => {
     const txtColor = op.txtColor ? op.txtColor : 'text-white';
     const bgColor = op.bgColor ? op.bgColor : 'bg-white';
-    // bottom-10 right-10 
     return (
         <div
-            className={`${op.coordinate} p-2 text-2xl ${bgColor} ${txtColor} rounded-2xl w-[50%] shadow-lg font-Andika cursor-pointer`}
+            className={`fixed bottom-10 right-10 p-4 text-2xl ${bgColor} ${txtColor} rounded-full shadow-lg cursor-pointer ${op.className || ''}`}
             onClick={op.onClick}>
-            {op.text}
+            {op.icon || op.text}
         </div>
     );
 };

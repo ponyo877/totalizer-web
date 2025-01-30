@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { FAB } from "./FAB";
+import { ResultButton } from "./ResultButton";
 
 interface QuestionProps {
     yesCount: number;
@@ -28,21 +28,22 @@ export const Question: FC<QuestionProps> = ({ yesCount, noCount }) => {
                     onChange={(e) => e.preventDefault()}
                 />
                 {showResults && (
-                    <div className="absolute top-[40%] text-center">
-                        <div className="text-lg font-bold">YES</div>
-                        <div className="flex items-end">
-                            <div className="text-8xl font-bold mb-2">
-                                {yesCount}
+                        <div className="absolute top-[40%] text-center animate-scale-in">
+                            <div className="text-lg font-bold animate-fade-in">YES</div>
+                            <div className="flex items-end justify-center">
+                                <div className="text-8xl font-bold mb-2 text-indigo-600 animate-pulse">
+                                    {yesCount}
+                                </div>
+                                <div className="text-base mb-3 animate-fade-in">/{totalCount}</div>
                             </div>
-                            <div className="text-base mb-3"> /{totalCount}</div>
                         </div>
-                    </div>
                 )}
                 <div className="absolute top-[85%] flex flex-col items-center text-center max-w-96 w-screen">
-                    <FAB 
+                    <ResultButton 
                         text="結果を見る" 
                         bgColor="bg-indigo-400" 
                         onClick={handleShowResults}
+                        disabled={showResults}
                     />
                 </div>
             </div>
