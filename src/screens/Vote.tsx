@@ -93,7 +93,7 @@ export const Vote: FC = () => {
       <FAB 
         icon="history" 
         onClick={() => navigate('/history')}  
-        className="fixed bottom-8 right-8"
+        className="fixed bottom-8"
       />
     </>
   )
