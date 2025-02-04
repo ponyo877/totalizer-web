@@ -1,81 +1,59 @@
-// import { FC } from "react";
-// import { FAB } from "./FAB";
-
-// export const OpenRoom: FC = () => {
-//     return (
-//         <>
-//             <div className="relative flex flex-col items-center justify-center h-screen max-w-96 w-screen">
-//                 <input
-//                     className="absolute flex flex-col bg-white text-center rounded-2xl h-[90%] w-[90%]"
-//                     type="text"
-//                     defaultValue='0877'
-//                     onChange={(e) => e.preventDefault()}
-//                 />
-//                 <FAB text="入室" bgColor="bg-indigo-400" />
-//                 <FAB text="IDをシェア" bgColor="bg-indigo-400" />
-//             </div>
-//         </>
-//     )
-// }
-
-import { FC, memo } from "react"
+import { FC, memo, useState } from "react"
 import { createPortal } from "react-dom"
 import { MdClose } from "react-icons/md";
+import Button from "./Button";
 
 type Props = {
   closeModal: () => void
-  handleAction: () => void
-  // isOpen: boolean
+  handleAction: (actionType: 'join' | 'create') => void
 }
 
-export const OpenRoomModal: FC<Props> = memo(() => {
-  // const {
-  //   closeModal,
-  //   handleAction,
-  //   // isOpen,
-  // } = props
+export const OpenRoomModal: FC<Props> = memo((props) => {
+  const {
+    closeModal,
+    handleAction,
+  } = props
+  const [roomKey, setRoomKey] = useState('')
 
- //早期リターン
-//  if (!isOpen) return <> </>
-
-  return <><p>sample modal</p></>
-  // createPortal(
-  //   //オーバレイ
-  //   <div
-  //     className={`fixed inset-0 z-40 flex items-center justify-center bg-[rgb(0_0_0/0.6)]`}
-  //     onClick={closeModal}
-  //   >
-  //     <div
-  //       className="w-full max-w-[540px] rounded bg-white py-4"
-  //       onClick={(e) => e.stopPropagation()}
-  //     >
-  //       <div className="flex w-full items-center justify-between border-b px-6 pb-4">
-  //         <div className="gap-4">
-  //           <p className="text-base sm:text-xl">〇〇の削除</p>
-  //         </div>
-  //         <button onClick={closeModal}>
-  //           <MdClose width={24} height={24} className="fill-gray-500" />
-  //         </button>
-  //       </div>
-  //       <div className="px-6 pt-8">
-  //         <p>本当に削除しても良いですか？</p>
-  //       </div>
-  //       <div className="mt-8 flex justify-end gap-x-2 border-t px-4 pt-4">
-  //         <button
-  //           className="rounded border border-gray-500 px-4 py-2 text-gray-500"
-  //           onClick={closeModal}
-  //         >
-  //           キャンセル
-  //         </button>
-  //         <button
-  //           className={`rounded px-4 py-2 text-white`}
-  //           onClick={handleAction}
-  //         >
-  //         削除
-  //         </button>
-  //       </div>
-  //     </div>
-  //   </div>,
-  //   document.getElementById("__next")!,
-  // )
+  return createPortal(
+    <div className="fixed inset-0 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg max-w-sm w-full">
+        <div className="flex flex-col items-center text-center mb-6">
+          <button
+            onClick={closeModal}
+            className="self-start p-2 hover:bg-gray-100 rounded-full"
+          >
+            <MdClose className="fill-gray-500 w-6 h-6" />
+          </button>
+          <h2 className="text-xl font-bold mb-2">ルームに参加</h2>
+          <div className="w-full mt-4">
+            <input
+              className="w-full rounded border border-gray-300 px-4 py-5 mb-4"
+              type="text"
+              placeholder="ルームキーを入力"
+              value={roomKey}
+              onChange={(e) => setRoomKey(e.target.value)}
+            />
+            <div className="flex justify-center items-center gap-4">
+              <Button
+                text="入室"
+                bgColor="bg-blue-500"
+                txtColor="text-white"
+                center
+                onClick={() => handleAction('join')}
+              />
+              <Button
+                text="作成"
+                bgColor="bg-blue-500"
+                txtColor="text-white"
+                center
+                onClick={() => handleAction('create')}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>,
+    document.getElementById("root")!
+  )
 })

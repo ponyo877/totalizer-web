@@ -15,7 +15,15 @@ export const Top: FC = () => {
   const openModal = () => {
     setIsOpen(true)
   }
-  const handleOpenRoom = () => console.log("ここで開室")
+  const handleOpenRoom = (actionType: 'join' | 'create') => {
+    if (actionType === 'join') {
+      console.log("ルームに参加")
+      // TODO: ルームキーを使用して参加処理を実装
+    } else {
+      console.log("新規ルームを作成")
+      // TODO: 新規ルーム作成処理を実装
+    }
+  }
   const navigate = useNavigate();
   return (
     <>
