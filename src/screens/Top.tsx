@@ -4,6 +4,7 @@ import { Title } from "../components/Title"
 import { LocalIcon, GlobalIcon } from "../components/Icon";
 import { useNavigate } from "react-router-dom";
 import { OpenRoomModal } from "../components/OpenRoomModal";
+import { connectWebSocket, createRoom } from "../utils/websocket";
 
 
 export const Top: FC = () => {
@@ -21,7 +22,9 @@ export const Top: FC = () => {
       // TODO: ルームキーを使用して参加処理を実装
     } else {
       console.log("新規ルームを作成")
-      // TODO: 新規ルーム作成処理を実装
+      const ws = connectWebSocket(() => {
+        createRoom(ws);
+      });
     }
   }
   const navigate = useNavigate();
