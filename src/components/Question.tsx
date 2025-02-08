@@ -1,40 +1,55 @@
-import { FC, useState, useEffect } from "react";
-import { ResultButton } from "./ResultButton";
+import { FC, useState, useEffect } from "react"
+import { ResultButton } from "./ResultButton"
 
 interface QuestionProps {
-    yesCount: number;
-    noCount: number;
-    onQuestionChange: (question: string) => void;
-    onShowResults: () => void;
+    yesCount: number
+    noCount: number
+    onQuestionChange: (question: string) => void
+    onShowResults: () => void
 }
 
 export const Question: FC<QuestionProps> = ({ yesCount, noCount, onQuestionChange, onShowResults }) => {
-    const [showResults, setShowResults] = useState(false);
-    const [question, setQuestion] = useState('ここに質問を書きます');
-    const totalCount = yesCount + noCount;
+    const [showResults, setShowResults] = useState(false)
+    const [question, setQuestion] = useState('')
+    const totalCount = yesCount + noCount
 
     useEffect(() => {
-        onQuestionChange(question);
-    }, [question, onQuestionChange]);
+        onQuestionChange(question)
+    }, [question, onQuestionChange])
 
     const handleShowResults = () => {
-        setShowResults(true);
-        onShowResults();
-    };
+        setShowResults(true)
+        onShowResults()
+    }
 
     return (
         <>
             <div className="relative flex flex-col items-center justify-center h-screen max-w-96 w-screen">
-                <input
-                    className={`absolute flex flex-col bg-white text-center rounded-2xl w-[90%] transition-all duration-300 ${
+                <div 
+                    className={`absolute flex items-center justify-center bg-white rounded-2xl w-[90%] ${
                         showResults 
                             ? 'h-[30%] top-[5%] text-sm' 
-                            : 'h-[90%] text-base'
+                            : 'h-[90%]'
                     }`}
-                    type="text"
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                />
+                >
+                    <textarea
+                        className={`w-full h-full bg-transparent text-center focus:outline-none resize-none px-4 [&::-webkit-scrollbar]:hidden ${
+                            showResults ? 'cursor-default' : 'cursor-text'
+                        }`}
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        placeholder="ここに質問を書きます"
+                        readOnly={showResults}
+                        style={{
+                            wordWrap: 'break-word',
+                            overflowWrap: 'break-word',
+                            paddingTop: showResults ? '1rem' : 'calc(45% - 1rem)',
+                            paddingBottom: showResults ? '1rem' : 'calc(45% - 1rem)',
+                            msOverflowStyle: 'none',
+                            scrollbarWidth: 'none'
+                        }}
+                    />
+                </div>
                 {showResults && (
                         <div className="absolute top-[40%] text-center animate-scale-in">
                             <div className="text-lg font-bold animate-fade-in">YES</div>
@@ -56,5 +71,5 @@ export const Question: FC<QuestionProps> = ({ yesCount, noCount, onQuestionChang
                 </div>
             </div>
         </>
-    );
-};
+    )
+}
