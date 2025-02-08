@@ -10,7 +10,7 @@ interface QuestionProps {
 
 export const Question: FC<QuestionProps> = ({ yesCount, noCount, onQuestionChange, onShowResults }) => {
     const [showResults, setShowResults] = useState(false);
-    const [question, setQuestion] = useState('ここに質問を書きます?');
+    const [question, setQuestion] = useState('ここに質問を書きます');
     const totalCount = yesCount + noCount;
 
     useEffect(() => {

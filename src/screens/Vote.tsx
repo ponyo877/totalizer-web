@@ -5,6 +5,7 @@ import { Question } from "../components/Question"
 import BlockModal from "../components/BlockModal"
 import { FAB } from "../components/FAB"
 import { RoomHeader } from "../components/RoomHeader"
+import { setMessageHandler } from "../utils/websocket"
 
 interface HistoryItem {
   question: string
@@ -22,12 +23,28 @@ export const Vote: FC = () => {
   const [showModal, setShowModal] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState('ここに質問を書きます?')
   const [roomNumber, setRoomNumber] = useState<string | null>(null)
+  const [participants, setParticipants] = useState(0)
 
   useEffect(() => {
+    const roomCount = localStorage.getItem('roomCount')
+    if (roomCount) {
+      setParticipants(parseInt(roomCount))
+    }
     const storedRoomNumber = localStorage.getItem('roomNumber')
-    console.log('Stored room number:', storedRoomNumber) // デバッグ用
+    console.log('Stored room number:', storedRoomNumber)
     if (storedRoomNumber) {
       setRoomNumber(storedRoomNumber)
+      
+      // WebSocketメッセージハンドラーを設定
+      setMessageHandler((data) => {
+        console.log('Received WebSocket message:', data)
+        // type=1 (TypeEnter) のメッセージを処理
+        if (data.type === 1) {
+          if ('enter_count' in data) {
+            setParticipants(data.enter_count)
+          }
+        }
+      })
     }
   }, [])
 
@@ -69,11 +86,9 @@ export const Vote: FC = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedHistory))
   }, [currentQuestion, yesCount, noCount])
 
-  console.log('Current room number:', roomNumber) // デバッグ用
-
   return (
     <div className="relative">
-      <RoomHeader roomNumber={roomNumber} />
+      <RoomHeader roomNumber={roomNumber} participants={participants} />
       <div className="flex flex-col items-center justify-center bg-blue-50 h-dvh w-screen">
         <div className="flex flex-col items-center bg-blue-50 h-1/2 max-w-96 w-screen">
           <div className="flex flex-col items-center bg-indigo-200 h-5/6 max-w-96 w-screen">
@@ -87,11 +102,11 @@ export const Vote: FC = () => {
         </div>
         <div className="flex flex-col items-center bg-blue-50 h-1/2 w-screen">
           <div className="flex max-w-96 px-8 mb-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold">{yesCount + noCount}</div>
-              <div className="text-base">参加</div>
+              <div className="text-center">
+                <div className="text-4xl font-bold">{yesCount+noCount}</div>
+                <div className="text-base">投票済み</div>
+              </div>
             </div>
-          </div>
           <div className="max-w-96 px-8 mb-8">
             <Button text='YES' bgColor='bg-emerald-600' txtColor='text-white' center onClick={handleYesClick} />
             <Button text='NO' bgColor='bg-rose-600' txtColor='text-white' center onClick={handleNoClick} />

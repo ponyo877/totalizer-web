@@ -46,6 +46,7 @@ export const Top: FC = () => {
             setRoomNumber(roomNumber)
             localStorage.setItem('roomNumber', roomNumber)
             setIsOpen(false)
+            localStorage.setItem('roomCount', data.enter_count.toString())
             navigate('/vote')
           }
         }
@@ -63,6 +64,7 @@ export const Top: FC = () => {
             localStorage.setItem('roomNumber', data.room_number)
             setShowRoomNumber(true)
             setIsOpen(false)
+            localStorage.setItem('roomCount', "1")
           }
         }
       )
