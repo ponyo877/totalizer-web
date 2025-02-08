@@ -1,11 +1,11 @@
 import { FC, memo, useState } from "react"
 import { createPortal } from "react-dom"
-import { MdClose } from "react-icons/md";
-import Button from "./Button";
+import { MdClose } from "react-icons/md"
+import Button from "./Button"
 
 type Props = {
   closeModal: () => void
-  handleAction: (actionType: 'join' | 'create') => void
+  handleAction: (actionType: 'enter' | 'create', roomNumber?: string) => void
 }
 
 export const OpenRoomModal: FC<Props> = memo((props) => {
@@ -13,7 +13,7 @@ export const OpenRoomModal: FC<Props> = memo((props) => {
     closeModal,
     handleAction,
   } = props
-  const [roomKey, setRoomKey] = useState('')
+  const [roomNumber, setRoomNumber] = useState('')
 
   return createPortal(
     <div className="fixed inset-0 flex items-center justify-center">
@@ -31,8 +31,8 @@ export const OpenRoomModal: FC<Props> = memo((props) => {
               className="w-full rounded border border-gray-300 px-4 py-5 mb-4"
               type="text"
               placeholder="ルームキーを入力"
-              value={roomKey}
-              onChange={(e) => setRoomKey(e.target.value)}
+              value={roomNumber}
+              onChange={(e) => setRoomNumber(e.target.value)}
             />
             <div className="flex justify-center items-center gap-4">
               <Button
@@ -40,7 +40,7 @@ export const OpenRoomModal: FC<Props> = memo((props) => {
                 bgColor="bg-blue-500"
                 txtColor="text-white"
                 center
-                onClick={() => handleAction('join')}
+                onClick={() => handleAction('enter', roomNumber)}
               />
               <Button
                 text="作成"

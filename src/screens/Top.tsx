@@ -5,12 +5,14 @@ import { LocalIcon, GlobalIcon } from "../components/Icon"
 import { useNavigate } from "react-router-dom"
 import { OpenRoomModal } from "../components/OpenRoomModal"
 import { RoomNumberModal } from "../components/RoomNumberModal"
-import { connectWebSocket, createRoom } from "../utils/websocket"
+import { RoomNotFoundModal } from "../components/RoomNotFoundModal"
+import { connectWebSocket, createRoom, enterRoom } from "../utils/websocket"
 
 export const Top: FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [roomNumber, setRoomNumber] = useState<string | null>(null)
   const [showRoomNumber, setShowRoomNumber] = useState(false)
+  const [showRoomNotFound, setShowRoomNotFound] = useState(false)
 
   const closeModal = () => {
     setIsOpen(false)
@@ -20,27 +22,45 @@ export const Top: FC = () => {
     setShowRoomNumber(false)
   }
 
+  const closeRoomNotFoundModal = () => {
+    setShowRoomNotFound(false)
+  }
+
   const openModal = () => {
     setIsOpen(true)
   }
 
-  const handleOpenRoom = (actionType: 'join' | 'create') => {
-    if (actionType === 'join') {
-      console.log("ルームに参加")
-      // TODO: ルームキーを使用して参加処理を実装
-    } else {
+  const handleOpenRoom = (actionType: 'enter' | 'create', roomNumber?: string) => {
+    if (actionType === 'enter' && roomNumber) {
+      console.log("ルームに参加:", roomNumber)
+      const ws = connectWebSocket(
+        () => {
+          enterRoom(ws, roomNumber)
+        },
+        (data) => {
+          console.log('WebSocket received data:', data)
+          if (data.type === 0) {
+            setShowRoomNotFound(true)
+            setIsOpen(false)
+          } else if (data.type === 1) {
+            setRoomNumber(roomNumber)
+            localStorage.setItem('roomNumber', roomNumber)
+            setIsOpen(false)
+            navigate('/vote')
+          }
+        }
+      )
+    } else if (actionType === 'create') {
       console.log("新規ルームを作成")
       const ws = connectWebSocket(
         () => {
           createRoom(ws)
         },
         (data) => {
-          console.log('WebSocket received data:', data) // デバッグ用
-          if (data.type === 'room' && data.room_id) {
-            setRoomNumber(data.room_id)
-            // ローカルストレージに部屋番号を保存
-            localStorage.setItem('roomNumber', data.room_id)
-            console.log('Room number saved to localStorage:', data.room_id) // デバッグ用
+          console.log('WebSocket received data:', data)
+          if (data.room_number) {
+            setRoomNumber(data.room_number)
+            localStorage.setItem('roomNumber', data.room_number)
             setShowRoomNumber(true)
             setIsOpen(false)
           }
@@ -72,6 +92,11 @@ export const Top: FC = () => {
         <RoomNumberModal
           roomNumber={roomNumber}
           closeModal={closeRoomNumberModal}
+        />
+      )}
+      {showRoomNotFound && (
+        <RoomNotFoundModal
+          closeModal={closeRoomNotFoundModal}
         />
       )}
     </>
