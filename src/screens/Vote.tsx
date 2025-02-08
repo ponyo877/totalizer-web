@@ -1,45 +1,55 @@
-import { FC, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { FC, useState, useCallback, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import Button from "../components/Button"
 import { Question } from "../components/Question"
-import BlockModal from "../components/BlockModal";
-import { FAB } from "../components/FAB";
+import BlockModal from "../components/BlockModal"
+import { FAB } from "../components/FAB"
+import { RoomHeader } from "../components/RoomHeader"
 
 interface HistoryItem {
-  question: string;
-  participants: number;
-  yesCount: number;
-  timestamp: string;
+  question: string
+  participants: number
+  yesCount: number
+  timestamp: string
 }
 
-const STORAGE_KEY = 'vote-history';
+const STORAGE_KEY = 'vote-history'
 
 export const Vote: FC = () => {
-  const navigate = useNavigate();
-  const [yesCount, setYesCount] = useState(0);
-  const [noCount, setNoCount] = useState(0);
-  const [showModal, setShowModal] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState('ここに質問を書きます?');
+  const navigate = useNavigate()
+  const [yesCount, setYesCount] = useState(0)
+  const [noCount, setNoCount] = useState(0)
+  const [showModal, setShowModal] = useState(false)
+  const [currentQuestion, setCurrentQuestion] = useState('ここに質問を書きます?')
+  const [roomNumber, setRoomNumber] = useState<string | null>(null)
+
+  useEffect(() => {
+    const storedRoomNumber = localStorage.getItem('roomNumber')
+    console.log('Stored room number:', storedRoomNumber) // デバッグ用
+    if (storedRoomNumber) {
+      setRoomNumber(storedRoomNumber)
+    }
+  }, [])
 
   const handleYesClick = () => {
-    const newYesCount = yesCount + 1;
-    setYesCount(newYesCount);
-    setShowModal(true);
-  };
+    const newYesCount = yesCount + 1
+    setYesCount(newYesCount)
+    setShowModal(true)
+  }
 
   const handleNoClick = () => {
-    const newNoCount = noCount + 1;
-    setNoCount(newNoCount);
-    setShowModal(true);
-  };
+    const newNoCount = noCount + 1
+    setNoCount(newNoCount)
+    setShowModal(true)
+  }
 
   const handleReceiveClick = () => {
-    setShowModal(false);
-  };
+    setShowModal(false)
+  }
 
   const handleQuestionChange = useCallback((question: string) => {
-    setCurrentQuestion(question);
-  }, []);
+    setCurrentQuestion(question)
+  }, [])
 
   const handleShowResults = useCallback(() => {
     const historyItem: HistoryItem = {
@@ -47,20 +57,23 @@ export const Vote: FC = () => {
       participants: yesCount + noCount,
       yesCount: yesCount,
       timestamp: new Date().toLocaleString()
-    };
+    }
 
     // LocalStorageから既存の履歴を取得
-    const existingHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const existingHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
     
     // 新しい履歴を追加
-    const updatedHistory = [...existingHistory, historyItem];
+    const updatedHistory = [...existingHistory, historyItem]
     
     // LocalStorageに保存
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedHistory));
-  }, [currentQuestion, yesCount, noCount]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedHistory))
+  }, [currentQuestion, yesCount, noCount])
+
+  console.log('Current room number:', roomNumber) // デバッグ用
 
   return (
-    <>
+    <div className="relative">
+      <RoomHeader roomNumber={roomNumber} />
       <div className="flex flex-col items-center justify-center bg-blue-50 h-dvh w-screen">
         <div className="flex flex-col items-center bg-blue-50 h-1/2 max-w-96 w-screen">
           <div className="flex flex-col items-center bg-indigo-200 h-5/6 max-w-96 w-screen">
@@ -95,6 +108,6 @@ export const Vote: FC = () => {
         onClick={() => navigate('/history')}  
         className="fixed bottom-8"
       />
-    </>
+    </div>
   )
 }

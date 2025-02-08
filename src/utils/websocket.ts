@@ -1,4 +1,4 @@
-export const connectWebSocket = (onOpen?: () => void) => {
+export const connectWebSocket = (onOpen?: () => void, onMessage?: (data: any) => void) => {
   const ws = new WebSocket('ws://localhost:8000');
   
   ws.onopen = () => {
@@ -12,6 +12,13 @@ export const connectWebSocket = (onOpen?: () => void) => {
 
   ws.onclose = () => {
     console.log('WebSocket接続が閉じられました');
+  };
+
+  ws.onmessage = (event) => {
+    if (onMessage) {
+      const data = JSON.parse(event.data);
+      onMessage(data);
+    }
   };
 
   return ws;
