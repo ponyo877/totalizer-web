@@ -4,18 +4,19 @@ import { ResultButton } from "./ResultButton"
 interface QuestionProps {
     yesCount: number
     noCount: number
+    question: string
     onQuestionChange: (question: string) => void
     onShowResults: () => void
 }
 
-export const Question: FC<QuestionProps> = ({ yesCount, noCount, onQuestionChange, onShowResults }) => {
+export const Question: FC<QuestionProps> = ({ 
+    yesCount, 
+    noCount, 
+    question,
+    onQuestionChange, 
+    onShowResults 
+}) => {
     const [showResults, setShowResults] = useState(false)
-    const [question, setQuestion] = useState('')
-    const totalCount = yesCount + noCount
-
-    useEffect(() => {
-        onQuestionChange(question)
-    }, [question, onQuestionChange])
 
     const handleShowResults = () => {
         setShowResults(true)
@@ -37,7 +38,7 @@ export const Question: FC<QuestionProps> = ({ yesCount, noCount, onQuestionChang
                             showResults ? 'cursor-default' : 'cursor-text'
                         }`}
                         value={question}
-                        onChange={(e) => setQuestion(e.target.value)}
+                        onChange={(e) => onQuestionChange(e.target.value)}
                         placeholder="ここに質問を書きます"
                         readOnly={showResults}
                         style={{
@@ -57,7 +58,7 @@ export const Question: FC<QuestionProps> = ({ yesCount, noCount, onQuestionChang
                                 <div className="text-8xl font-bold mb-2 text-indigo-600 animate-pulse">
                                     {yesCount}
                                 </div>
-                                <div className="text-base mb-3 animate-fade-in">/{totalCount}</div>
+                                <div className="text-base mb-3 animate-fade-in">/{yesCount + noCount}</div>
                             </div>
                         </div>
                 )}
